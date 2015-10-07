@@ -12,7 +12,7 @@ Muito usada com aplicações Java, C, processing... permitindo trabalhar em baix
 ## Hardware Acceleration e GPU.
 
 O uso mais comum é instalar o [Raspbian](https://www.raspbian.org/), distro especial do linux para a Raspberry e abrir sua aplicação no browser disponível (Epiphany ou Midori). Você vai conseguir navegar, mas esqueça o uso de animações e alta performace:
-- Primeiro porque a memória de 1GB da RPI é a mesma para vídeo e RAM, ou seja, você possui 1GB divido, se você necessitar de mais RAM para rodar o sistema operacional significa que está perdendo memória de vídeo. 
+- Primeiro porque a memória de 1GB da RPI é a mesma para vídeo e RAM, ou seja, você possui 1GB divido, se você necessitar de mais RAM para rodar o sistema operacional significa que está perdendo memória de vídeo.
 - Segundo e principal motivo, é que nativamente nenhum browser consegue utilizar a GPU (hardware acceleration) para processar as animações.
 
 Mas existe um hack utilizando a biblioteca [QT](https://en.wikipedia.org/wiki/Qt_(software)) para forçar o uso da GPU. Copilando o webkit dentro da biblioteca QT e dando acesso a este recurso.
@@ -22,15 +22,15 @@ Para isso é preciso construir uma distro clean do linux, aliviando o máximo da
 
 ## Buildroot am linux distro
 
-Crosscompile, kernel configuration, library, make são keywords do mundo linux a pouca documentação exata e bem baixo nível comparado ao nosso mundo web. Porém existem umas ferramentas que facilitam esse processo. O buildroot é um jeito simples de conseguir gerar sua distro para ambientes embarcados. 
+Crosscompile, kernel configuration, library, make são keywords do mundo linux a pouca documentação exata e bem baixo nível comparado ao nosso mundo web. Porém existem umas ferramentas que facilitam esse processo. O buildroot é um jeito simples de conseguir gerar sua distro para ambientes embarcados.
 
 ![Image](http://cellux.github.io/articles/diy-linux-with-buildroot-part-1/buildroot.png)
 
-``` 
+```
 Tip: cltr + / : pesquisa
 ```
 
-Mesmo com ele, é preciso entender qual a dependência de cada sistema e biblioteca que está sendo instalada. 
+Mesmo com ele, é preciso entender qual a dependência de cada sistema e biblioteca que está sendo instalada.
 Mas a empresa [Methorogical](https://github.com/Metrological/buildroot) fez um exelente trabalho, iniciado pelo [@albertd](https://github.com/albertd) que montou em cima do buildroot as configs mais cleans possiveis para poder ter a biblioteca QT, webkit e browser instalados.
 
 Basta clonar o repositório:
@@ -52,12 +52,12 @@ caso queria acessar o menu do builroot e ver possibilidades de instalação, use
 make menuconfig
 ```
 
-Neste reposítorio tem um arquivo básico de [.config](linkdofile) com todas as bibliotecas que achamos ensencial para rodar nossa aplicação. Isso inclui git, fbv, websocket, python...
+Neste reposítorio tem um arquivo básico de [.config](https://github.com/zehfernandes/rpi-webapplication/blob/master/snippets/.config) com todas as bibliotecas que achamos ensencial para rodar nossa aplicação. Isso inclui git, fbv, websocket, python...
 
 basta colar no diretório do seu build e rodar
 
 ```sh
-make 
+make
 ```
 
 O processo leva bastante tempo, principalmente a primeira vez, rodando em um Macbook Air com linux demorou por volta de 3 horas.
@@ -71,7 +71,7 @@ Terminado a copilação ele vai gerar uma imagem pronta para ser copiada para o 
 Com o sdcard pronto, insira ele na RPI, ligue os cabos, o de ethernet também porque com ele, via ssh você vai acessar sua Rasp (login: root, password: root)
 
 ```sh
-ssh root@192.168.1.100 # replace with RPI ip address``
+ssh root@192.168.1.100 # replace with RPI ip address
 ```
 
 E Para rodar sua aplicação dentro da distro:
@@ -108,7 +108,7 @@ A distro criada a partir do buildroot ela é clean a ponto de muitos recursos qu
 
 ### Configurações da RPI
 
-Dentro da partição `boot` você tem o arquivo config.txt que define valores básicos para o hardware da Raspberry. Alguns valores modificados para este projeto:
+Dentro da partição `boot` você tem o arquivo [config.txt](https://github.com/zehfernandes/rpi-webapplication/blob/master/snippets/config.txt) que define valores básicos para o hardware da Raspberry. Alguns valores modificados para este projeto:
 
 ```txt
 gpu_mem_1024=512 # metade da mémoria para vídeo
@@ -124,26 +124,26 @@ O legal de utilizar a RPI é montar um sistema intermitente, que se atualize e i
 
 Dentro da pasta `/etc/init.d/` você possui arquivos nomeados com S01, S02 o número representa a ordem que ele será executado durante o Boot:
 
-- [S80init](arquivo)
-- [S90app](arquivo)
+- [S80init](https://github.com/zehfernandes/rpi-webapplication/blob/master/snippets/S80init)
+- [S90app](https://github.com/zehfernandes/rpi-webapplication/blob/master/snippets/S90apps)
 
 
 ### Splashscreen? Porque não?
 
 O [@felipesanches](https://github.com/felipesanches) desenvolveu um sistema para você ter uma splashscreen. São 3 passos:
 
-1 - Faça uma sequência de PNGs com o nome `frame*.png`, sendo o asterisco o número de cada frame e coloque em alguma pasta da sua raspberry 
-2 - Edite o arquivo `S01logging` e nas primeiras linhas coloque o seguinte código:
+1. Faça uma sequência de PNGs com o nome `frame*.png`, sendo o asterisco o número de cada frame e coloque em alguma pasta da sua raspberry
+2. Edite o arquivo `S01logging` e nas primeiras linhas coloque o seguinte código:
 ```sh
 #early splash!
 cat /dev/zero 1> /dev/fb0 2>/dev/null
 fbv -i -c /home/default/bootanimations/frame*.png --delay 1
 ```
-3 - Use o arquivo [cmdline.txt](arquivo) deste repositório, ele está preparado para silenciar os logs de incialização. Recomendo fazer isto no final do processo. Eles são utéis durante o processo de desenvolvimento (há)
+3. Use o arquivo [cmdline.txt](https://github.com/zehfernandes/rpi-webapplication/blob/master/snippets/cmdline.txt) deste repositório, ele está preparado para silenciar os logs de incialização. Recomendo fazer isto no final do processo. Eles são utéis durante o processo de desenvolvimento (há)
 
 
 ## Fim
 
 Durante esse processo em descobrir como ter uma aplicação web performática na RPI, apreendi bastante e gostaria de agradescer ao [@netoarmando](https://github.com/netoarmando), [@felipesanches](https://github.com/felipesanches) pelas dicas e pelo intensivo de comandos do terminal.
 
-Caso tenha alguma dúvida sinta-se a vontade em usar os [issues do github]() :D
+Caso tenha alguma dúvida sinta-se a vontade em usar os [issues do github](https://github.com/zehfernandes/rpi-webapplication/issues) :D
