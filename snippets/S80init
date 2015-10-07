@@ -1,0 +1,10 @@
+#!/bin/sh
+#
+# Start processing
+#
+
+wget -q --spider http://google.com
+if [ $? -eq 0 ]; then
+    cd /home/default/yourdirectory
+    git pull --rebase
+fi
