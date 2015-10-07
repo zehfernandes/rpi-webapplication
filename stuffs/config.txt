@@ -1,0 +1,15 @@
+disable_splash=1
+disable_overscan=1
+boot_delay=0
+arm_freq=1000
+gpu_freq=500
+over_voltage=6
+avoid_warnings=1
+force_turbo=0
+gpu_mem_256=128
+gpu_mem_512=256
+gpu_mem_1024=512
+kernel=zImage
+hdmi_group=1
+hdmi_mode=16
+hdmi_force_hotplug=1

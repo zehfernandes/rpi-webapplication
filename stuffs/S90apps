@@ -1,0 +1,3 @@
+#!/bin/sh
+
+nohup /root/setup.sh & /root/run_app.sh & /root/run_appconnect.sh & /root/run_qtbrowser.sh
