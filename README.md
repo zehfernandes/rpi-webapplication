@@ -132,14 +132,14 @@ Dentro da pasta `/etc/init.d/` você possui arquivos nomeados com S01, S02 o nú
 
 O [@felipesanches](https://github.com/felipesanches) desenvolveu um sistema para você ter uma splashscreen. São 3 passos:
 
-1. Faça uma sequência de PNGs com o nome `frame*.png`, sendo o asterisco o número de cada frame e coloque em alguma pasta da sua raspberry
-2. Edite o arquivo `S01logging` e nas primeiras linhas coloque o seguinte código:
+*1 - Faça uma sequência de PNGs com o nome `frame*.png`, sendo o asterisco o número de cada frame e coloque em alguma pasta da sua raspberry
+*2 - Edite o arquivo `S01logging` e nas primeiras linhas coloque o seguinte código:
 ```sh
 #early splash!
 cat /dev/zero 1> /dev/fb0 2>/dev/null
 fbv -i -c /home/default/bootanimations/frame*.png --delay 1
 ```
-3. Use o arquivo [cmdline.txt](https://github.com/zehfernandes/rpi-webapplication/blob/master/snippets/cmdline.txt) deste repositório, ele está preparado para silenciar os logs de incialização. Recomendo fazer isto no final do processo. Eles são utéis durante o processo de desenvolvimento (há)
+*3 - Use o arquivo [cmdline.txt](https://github.com/zehfernandes/rpi-webapplication/blob/master/snippets/cmdline.txt) deste repositório, ele está preparado para silenciar os logs de incialização. Recomendo fazer isto no final do processo. Eles são utéis durante o processo de desenvolvimento (há)
 
 
 ## Fim
