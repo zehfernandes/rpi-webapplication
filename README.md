@@ -4,25 +4,24 @@ _Soon English version_
 
 Raspberry é uma placa single-board incrível, compacta, pontente e de baixo custo. Entrou nas graças de quem gosta de um bom DIY (do it yourself). Com 25 dólares você tem um processador 900MHz quad-core ARM, 1GB de RAM, saída HDMI, mini-sdcard, entrada USB...
 
-Muito usada com aplicações Java, C, processing... permitindo trabalhar em baixo nível em contato direto com os recursos de hardware. Mas para rodar uma aplicação web você fica dependente de um OS e muito distante destes recursos. É preciso customizar uma distro para tirar proveito da placa, de uma olhada no vídeo abaixo :)
+Muito usada com aplicações Java, C, processing... permitindo trabalhar em baixo nível em contato direto com os recursos de hardware. Mas para rodar uma aplicação web você fica dependente de um OS e muito distante destes recursos. É preciso customizar uma distro para tirar proveito da placa.
 
 [![Raspberry](https://dl.dropboxusercontent.com/u/8015936/D3/raspa.jpg)](https://dl.dropboxusercontent.com/u/8015936/D3/rasp.mp4)
 
 
 ## Hardware Acceleration e GPU.
 
-O uso mais comum é instalar o [Raspbian](https://www.raspbian.org/), distro especial do linux para a Raspberry e abrir sua aplicação no browser disponível (Epiphany ou Midori). Você vai conseguir navegar, mas esqueça o uso de animações e alta performace:
+O uso mais comum é instalar o [Raspbian](https://www.raspbian.org/), distro especial do linux para a Raspberry e abrir sua aplicação no browser disponível (Epiphany ou Midori). Você vai conseguir navegar, mas esqueça o uso de animações e alta performance:
 - Primeiro porque a memória de 1GB da RPI é a mesma para vídeo e RAM, ou seja, você possui 1GB divido, se você necessitar de mais RAM para rodar o sistema operacional significa que está perdendo memória de vídeo.
-- Segundo e principal motivo, é que nativamente nenhum browser consegue utilizar a GPU (hardware acceleration) para processar as animações.
+- Segundo e principal motivo, é que, nativamente nenhum browser consegue utilizar a GPU (hardware acceleration) para processar as animações.
 
-Mas existe um hack utilizando a biblioteca [QT](https://en.wikipedia.org/wiki/Qt_(software)) para forçar o uso da GPU. Copilando o webkit dentro da biblioteca QT e dando acesso a este recurso.
+Mas existe um hack utilizando a biblioteca [QT](https://en.wikipedia.org/wiki/Qt_(software)) para forçar o uso da GPU. Copilando a engine webkit dentro da biblioteca QT e dando acesso a este recurso.
 
 Para isso é preciso construir uma distro clean do linux, aliviando o máximo da memória RAM e copilando o essencial para poder rodar sua aplicação.
 
+## Buildroot e a distro linux
 
-## Buildroot am linux distro
-
-Crosscompile, kernel configuration, library, make são keywords do mundo linux a pouca documentação exata e bem baixo nível comparado ao nosso mundo web. Porém existem umas ferramentas que facilitam esse processo. O buildroot é um jeito simples de conseguir gerar sua distro para ambientes embarcados.
+Crosscompile, kernel configuration, library, make são keywords do mundo linux, a pouca documentação exata e bem baixo nível comparado ao nosso mundo web. Porém existem ferramentas que facilitam esse processo. O buildroot é um jeito simples de conseguir gerar sua distro para ambientes embarcados.
 
 ![Image](http://cellux.github.io/articles/diy-linux-with-buildroot-part-1/buildroot.png)
 
@@ -31,7 +30,7 @@ Tip: cltr + / : pesquisa
 ```
 
 Mesmo com ele, é preciso entender qual a dependência de cada sistema e biblioteca que está sendo instalada.
-Mas a empresa [Methorogical](https://github.com/Metrological/buildroot) fez um exelente trabalho, iniciado pelo [@albertd](https://github.com/albertd) que montou em cima do buildroot as configs mais cleans possiveis para poder ter a biblioteca QT, webkit e browser instalados.
+Mas a empresa [Methorogical](https://github.com/Metrological/buildroot) fez um exelente trabalho, iniciado pelo [@albertd](https://github.com/albertd) criando um repositório com as configurações prontas do buildroot para utilizar a biblioteca QT, webkit e rodar sua aplicação.
 
 Basta clonar o repositório:
 
@@ -68,13 +67,13 @@ O processo leva bastante tempo, principalmente a primeira vez, rodando em um Mac
 Terminado a copilação ele vai gerar uma imagem pronta para ser copiada para o SDcard.
 [Neste link](https://github.com/Metrological/buildroot#deploying-on-a-raspberry-pi-2) você tem o processo para copiar a imagem via terminal, só seguir os passos.
 
-Com o sdcard pronto, insira ele na RPI, ligue os cabos, o de ethernet também porque com ele, via ssh você vai acessar sua Rasp (login: root, password: root)
+Com o sdcard pronto, insira ele na RPI, ligue os cabos, o de ethernet também, é com ele que você ira acessar via ssh sua RPI (login: root, password: root)
 
 ```sh
 ssh root@192.168.1.100 # replace with RPI ip address
 ```
 
-E Para rodar sua aplicação dentro da distro:
+E para rodar sua aplicação dentro da distro, basta chamar o comando:
 
 ```sh
 qtbrowser --url=http://url
@@ -103,8 +102,7 @@ _OBS: Rodamos nossa aplicação em localhost utilizando o [tornado web server](h
 
 ## Detalhes e sh
 
-A distro criada a partir do buildroot ela é clean a ponto de muitos recursos que um usuário linux está acostumado utilizar não existem. Por exemplo o `apt-get`. As vezes é preciso instalar manualmente alguns recursos.
-
+A distro criada a partir do buildroot ela é clean a ponto de muitos recursos que um usuário linux está acostumado utilizar não existirem, por exemplo o `apt-get`. As vezes é preciso instalar manualmente alguns recursos.
 
 ### Configurações da RPI
 
@@ -117,12 +115,11 @@ hdmi_mode=16 # Full HD 60p
 hdmi_force_hotplug=1 # Força entrada HDMI
 ```
 
-
 ### Inicialização automática
 
 O legal de utilizar a RPI é montar um sistema intermitente, que se atualize e inicie sozinho. Utilizando sh conseguimos criar alguns snippts que ajudam nisto.
 
-Dentro da pasta `/etc/init.d/` você possui arquivos nomeados com S01, S02 o número representa a ordem que ele será executado durante o Boot:
+Dentro da pasta `/etc/init.d/` você possui arquivos nomeados com S01, S02 o número representa a ordem que ele será executado durante o Boot, criamos dois arquivos um de atualização automática via git e o outro para iniciar a aplicação:
 
 - [S80init](https://github.com/zehfernandes/rpi-webapplication/blob/master/snippets/S80init)
 - [S90app](https://github.com/zehfernandes/rpi-webapplication/blob/master/snippets/S90apps)
@@ -144,6 +141,6 @@ fbv -i -c /home/default/bootanimations/frame*.png --delay 1
 
 ## Fim
 
-Durante esse processo em descobrir como ter uma aplicação web performática na RPI, apreendi bastante e gostaria de agradescer ao [@netoarmando](https://github.com/netoarmando), [@felipesanches](https://github.com/felipesanches) pelas dicas e pelo intensivo de comandos do terminal.
+Durante o processo em descobrir como ter uma aplicação web performática na RPI, apreendi bastante e gostaria de agradescer ao [@netoarmando](https://github.com/netoarmando), [@felipesanches](https://github.com/felipesanches) pelas dicas e pelo intensivo de comandos do terminal.
 
 Caso tenha alguma dúvida sinta-se a vontade em usar os [issues do github](https://github.com/zehfernandes/rpi-webapplication/issues) :D
