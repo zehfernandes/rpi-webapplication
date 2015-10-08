@@ -1,79 +1,76 @@
-# Como rodar uma aplicação web na raspberry a 60FPS
+# How running a 60fps web application in RaspberryPI
 
-_Soon English version_
+[Versão em português]()
 
-Raspberry é uma placa single-board incrível, compacta, pontente e de baixo custo. Entrou nas graças de quem gosta de um bom DIY (do it yourself). Com 25 dólares você tem um processador 900MHz quad-core ARM, 1GB de RAM, saída HDMI, mini-sdcard, entrada USB...
+Raspberry is an amazing single-board computer, compact, powerful and low-cost. With 25 dollars you have a quad-core Cortex-A7 CPU running at 900 MHz and 1 GB RAM, HDMI out...
 
-Muito usada com aplicações Java, C, processing... permitindo trabalhar em baixo nível em contato direto com os recursos de hardware. Mas para rodar uma aplicação web você fica dependente de um OS e muito distante destes recursos. É preciso customizar uma distro para tirar proveito da placa.
+Most used with Java, C and processing applications. Languages that allowed to work at low level and control hardware resources. But to run a web application you are dependent on an OS and far away from these resources. You must customize a distro to take advantage of GPU.
 
 [![Raspberry](https://dl.dropboxusercontent.com/u/8015936/D3/raspa.jpg)](https://dl.dropboxusercontent.com/u/8015936/D3/rasp.mp4)
 
+## Hardware Acceleration and GPU.
 
-## Hardware Acceleration e GPU.
+The frequent use is to install the special distro [Raspbian](https://www.raspbian.org/) and open your application in the web browser available (Epiphany or Midori). You will be able to navigate but forget about animations and high performance:
+- First, because the 1GB memory is the same for video and RAM. You have 1GB split.
+- Second, the browsers cannot natively use the GPU (hardware acceleration) to process animations.
 
-O uso mais comum é instalar o [Raspbian](https://www.raspbian.org/), distro especial do linux para a Raspberry e abrir sua aplicação no browser disponível (Epiphany ou Midori). Você vai conseguir navegar, mas esqueça o uso de animações e alta performance:
-- Primeiro porque a memória de 1GB da RPI é a mesma para vídeo e RAM, ou seja, você possui 1GB divido, se você necessitar de mais RAM para rodar o sistema operacional significa que está perdendo memória de vídeo.
-- Segundo e principal motivo, é que, nativamente nenhum browser consegue utilizar a GPU (hardware acceleration) para processar as animações.
+But there is a hack using the [QT](https://en.wikipedia.org/wiki/Qt_(software)) library to force the use of the GPU. Compiling the webkit engine inside the QT giving access to this resource.
 
-Mas existe um hack utilizando a biblioteca [QT](https://en.wikipedia.org/wiki/Qt_(software)) para forçar o uso da GPU. Copilando a engine webkit dentro da biblioteca QT e dando acesso a este recurso.
+To do that you need to build a clean Linux distro. Remove unnecessary stuff to free the RAM memory and compile just the essential for your web application.
 
-Para isso é preciso construir uma distro clean do linux, aliviando o máximo da memória RAM e copilando o essencial para poder rodar sua aplicação.
+## Buildroot and Linux distro
 
-## Buildroot e a distro linux
-
-Crosscompile, kernel configuration, library, make são keywords do mundo linux, a pouca documentação exata e bem baixo nível comparado ao nosso mundo web. Porém existem ferramentas que facilitam esse processo. O buildroot é um jeito simples de conseguir gerar sua distro para ambientes embarcados.
+Cross compile, kernel configuration, make are common keywords in the Linux world, very low-level knowledge compare to the web environment. But are some tools to help us in this chaos. The Builroot is a simple, efficient and easy-to-use tool to generate embedded Linux systems through cross-compilation.
 
 ![Image](http://cellux.github.io/articles/diy-linux-with-buildroot-part-1/buildroot.png)
 
 ```
-Tip: cltr + / : pesquisa
+Tip: cltr + / : search
 ```
 
-Mesmo com ele, é preciso entender qual a dependência de cada sistema e biblioteca que está sendo instalada.
-Mas a empresa [Methorogical](https://github.com/Metrological/buildroot) fez um exelente trabalho, iniciado pelo [@albertd](https://github.com/albertd) criando um repositório com as configurações prontas do buildroot para utilizar a biblioteca QT, webkit e rodar sua aplicação.
+Even with buildroot is important to understand the dependencies to each library you want to compile.
+The [Methorogical](https://github.com/Metrological/buildroot)  company did an excellent job, started by [@albertd](https://github.com/albertd). A repository with the best performance configurations for the buildroot to run the QT library and WebKit engine in Raspberry.
 
-Basta clonar o repositório:
+You just need clone the repository:
 
 ```sh
 git clone https://github.com/Metrological/buildroot
 cd buildroot
 ```
 
-e dentro dele aplicar as configurações básicas para RPI modelo 2
+inside the directory, apply the basics configurations for RPI Model 2.
 
 ```sh
 make rpi2_qt5webkit_defconfig
 ```
 
-caso queria acessar o menu do builroot e ver possibilidades de instalação, use:
+in case of you want to access the buildroot menu and see other libraries available, use:
 
 ```sh
 make menuconfig
 ```
 
-Neste reposítorio tem um arquivo básico de [.config](https://github.com/zehfernandes/rpi-webapplication/blob/master/snippets/.config) com todas as bibliotecas que achamos ensencial para rodar nossa aplicação. Isso inclui git, fbv, websocket, python...
+In this repository have a basic [.config file](https://github.com/zehfernandes/rpi-webapplication/blob/master/snippets/.config) with all libraries we think are essential to run a web application  (like git, fbv, websockt, python...). Ready to use.
 
-basta colar no diretório do seu build e rodar
+copy the file for your builroot directory and run:
 
 ```sh
 make
 ```
 
-O processo leva bastante tempo, principalmente a primeira vez, rodando em um Macbook Air com linux demorou por volta de 3 horas.
+The process takes a long time. Running Linux ubuntu on Macbook Air took about 3 hours.
 
+## Inside the Raspberry
 
-## Na raspberry
+Now you have an image ready to clone for your sdcard. [This link](https://github.com/Metrological/buildroot#deploying-on-a-raspberry-pi-2) you have all the instructions to copy the image using the terminal.
 
-Terminado a copilação ele vai gerar uma imagem pronta para ser copiada para o SDcard.
-[Neste link](https://github.com/Metrological/buildroot#deploying-on-a-raspberry-pi-2) você tem o processo para copiar a imagem via terminal, só seguir os passos.
-
-Com o sdcard pronto, insira ele na RPI, ligue os cabos, o de ethernet também, é com ele que você ira acessar via ssh sua RPI (login: root, password: root)
+With your card ready. You can login to the system using ssh (login: root, password: root). Insert the sdcard in the RPI, connect the cables and use:
 
 ```sh
 ssh root@192.168.1.100 # replace with RPI ip address
 ```
 
-E para rodar sua aplicação dentro da distro, basta chamar o comando:
+To run your web application:
 
 ```sh
 qtbrowser --url=http://url
@@ -81,66 +78,64 @@ qtbrowser --url=http://url
 
 ## Qtbrowser
 
-O QT não é o chrome e nem o safari, todos usam a engine webkit para renderização, mas possuem detalhes e formas diferentes de lidar com o HTML. É bem importante desenvolver seu front-end testando diretamente no QTbrowser. Durante nossos testes para criação desta interface:
+The QTbrowser is not chrome and safari. Even all use the WebKit engine for rendering. Qtbrowser has details and different ways of dealing with HTML. It is important to develop your front-end code testing directly on RPI. But we could make that interface:
 
 [![Interface](https://dl.dropboxusercontent.com/u/8015936/D3/interface.png)](https://dl.dropboxusercontent.com/u/8015936/D3/rpi-interface.mp4)
 
-Apreendemos vários detalhes e algumas dicas:
+Below some notes about render machine of Qtbrowser:
 
-- Classes com animações CSS de inicialização não funcionam, é preciso adicionar a classe pós carregar a página.
-- Utilize apenas as propriedades que utilizam composite layer
-`transition`, `opacity`
-- Imagens com dimensões maiores que 1000px tendem a diminuir o FPS
-- You don't need jquery
-- Evite gradientes e imagens com opacidade
-- Várias imagens na tela tem melhor performace que vários canvas
-- É melhor clonar seus elementos do DOM que crialos inteirmaente via javascript.
+- In the boot of page classes with CSS animations do not work, you must add the class after loading the page.
+- Use only the properties that use the CSS composite layer
+`transition`,` opacity`.
+- Images with the size greater than 1000px decrease the FPS
+- You do not need jQuery
+- Avoid gradients and images with opacity
+- Multiple images on the screen have better performance than multiple canvas
+- Clone your DOM elements than create entire by javascript
 
+_PS: To server our pages we use [tornado web server](http://www.tornadoweb.org/en/stable/) from python, but you can use PHP our grunt too_
 
-_OBS: Rodamos nossa aplicação em localhost utilizando o [tornado web server](http://www.tornadoweb.org/en/stable/) do python, mas você pode utilizar php ou até mesmo o grunt para levantar seu server._
+## Details and sh
 
+The distro compiled by buldroot is very clean. Many features that a regular Linux user is used to run, probably does exist, for example `apt-get`. Sometimes you need install manual this features.
 
-## Detalhes e sh
+### RPI Configurations
 
-A distro criada a partir do buildroot ela é clean a ponto de muitos recursos que um usuário linux está acostumado utilizar não existirem, por exemplo o `apt-get`. As vezes é preciso instalar manualmente alguns recursos.
-
-### Configurações da RPI
-
-Dentro da partição `boot` você tem o arquivo [config.txt](https://github.com/zehfernandes/rpi-webapplication/blob/master/snippets/config.txt) que define valores básicos para o hardware da Raspberry. Alguns valores modificados para este projeto:
+Inside `boot` partition, you have the file [config.txt](https://github.com/zehfernandes/rpi-webapplication/blob/master/snippets/config.txt). It set the default values for RPI hardware. Below some new values for this project:
 
 ```txt
-gpu_mem_1024=512 # metade da mémoria para vídeo
+gpu_mem_1024=512 # memory video set
 hdmi_group=1
 hdmi_mode=16 # Full HD 60p
-hdmi_force_hotplug=1 # Força entrada HDMI
+hdmi_force_hotplug=1 # force HDMI entrance
 ```
 
-### Inicialização automática
+### Automatic boot
 
-O legal de utilizar a RPI é montar um sistema intermitente, que se atualize e inicie sozinho. Utilizando sh conseguimos criar alguns snippts que ajudam nisto.
+The cool to use an RPI is built an auto system. Update and initialize automatic. Using bash script we create some snippets to help that:
 
-Dentro da pasta `/etc/init.d/` você possui arquivos nomeados com S01, S02 o número representa a ordem que ele será executado durante o Boot, criamos dois arquivos um de atualização automática via git e o outro para iniciar a aplicação:
+
+Inside the folder `/etc/init.d/` you have files named S01*, S02* the number meaning the order of the file will be executed in the boot.
 
 - [S80init](https://github.com/zehfernandes/rpi-webapplication/blob/master/snippets/S80init)
 - [S90app](https://github.com/zehfernandes/rpi-webapplication/blob/master/snippets/S90apps)
 
 
-### Splashscreen? Porque não?
+### Splashscreen? Why not?
 
-O [@felipesanches](https://github.com/felipesanches) desenvolveu um sistema para você ter uma splashscreen. São 3 passos:
+[@felipesanches](https://github.com/felipesanches) develop a system to have splashscreen in 3 simple steps:
 
-*1 - Faça uma sequência de PNGs com o nome `frame*.png`, sendo o asterisco o número de cada frame e coloque em alguma pasta da sua raspberry
-*2 - Edite o arquivo `S01logging` e nas primeiras linhas coloque o seguinte código:
+*1 - Create a PNG sequence with name `frame*.png` and put in some diretory inside RPI.
+*2 - Edit the file `S01logging` and include in the first line the follow code:
 ```sh
 #early splash!
 cat /dev/zero 1> /dev/fb0 2>/dev/null
 fbv -i -c /home/default/bootanimations/frame*.png --delay 1
 ```
-*3 - Use o arquivo [cmdline.txt](https://github.com/zehfernandes/rpi-webapplication/blob/master/snippets/cmdline.txt) deste repositório, ele está preparado para silenciar os logs de incialização. Recomendo fazer isto no final do processo. Eles são utéis durante o processo de desenvolvimento (há)
+*3 - Use the file [cmdline.txt](https://github.com/zehfernandes/rpi-webapplication/blob/master/snippets/cmdline.txt). It be prepare to mute the boot log.
 
+## End
 
-## Fim
+Thanks to [@netoarmando](https://github.com/netoarmando) and [@felipesanches](https://github.com/felipesanches) for help me in the process to run web application 60FPs in Raspberry.
 
-Durante o processo em descobrir como ter uma aplicação web performática na RPI, apreendi bastante e gostaria de agradescer ao [@netoarmando](https://github.com/netoarmando), [@felipesanches](https://github.com/felipesanches) pelas dicas e pelo intensivo de comandos do terminal.
-
-Caso tenha alguma dúvida sinta-se a vontade em usar os [issues do github](https://github.com/zehfernandes/rpi-webapplication/issues) :D
+If you have any doubt use the [github issues](https://github.com/zehfernandes/rpi-webapplication/issues) :D
