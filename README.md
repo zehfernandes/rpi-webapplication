@@ -1,6 +1,6 @@
 # How running a 60fps web application in RaspberryPI
 
-[Versão em português]()
+[Versão em português](https://github.com/zehfernandes/rpi-webapplication/blob/master/README_pt.md)
 
 Raspberry is an amazing single-board computer, compact, powerful and low-cost. With 25 dollars you have a quad-core Cortex-A7 CPU running at 900 MHz and 1 GB RAM, HDMI out...
 

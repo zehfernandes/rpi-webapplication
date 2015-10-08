@@ -1,6 +1,6 @@
 # Como rodar uma aplicação web na raspberry a 60FPS
 
-[English version]()
+[English version](https://github.com/zehfernandes/rpi-webapplication/blob/master/README.md)
 
 Raspberry é uma placa single-board incrível, compacta, pontente e de baixo custo. Entrou nas graças de quem gosta de um bom DIY (do it yourself). Com 25 dólares você tem um processador 900MHz quad-core ARM, 1GB de RAM, saída HDMI, mini-sdcard, entrada USB...
 
