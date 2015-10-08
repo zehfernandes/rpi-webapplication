@@ -126,12 +126,14 @@ Inside the folder `/etc/init.d/` you have files named S01*, S02* the number mean
 [@felipesanches](https://github.com/felipesanches) develop a system to have splashscreen in 3 simple steps:
 
 *1 - Create a PNG sequence with name `frame*.png` and put in some diretory inside RPI.
+
 *2 - Edit the file `S01logging` and include in the first line the follow code:
 ```sh
 #early splash!
 cat /dev/zero 1> /dev/fb0 2>/dev/null
 fbv -i -c /home/default/bootanimations/frame*.png --delay 1
 ```
+
 *3 - Use the file [cmdline.txt](https://github.com/zehfernandes/rpi-webapplication/blob/master/snippets/cmdline.txt). It be prepare to mute the boot log.
 
 ## End
