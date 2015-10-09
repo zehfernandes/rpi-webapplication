@@ -1,4 +1,4 @@
-# How running a 60fps web application in RaspberryPI
+# How to run a 60fps web application in RaspberryPI
 
 [Versão em português](https://github.com/zehfernandes/rpi-webapplication/blob/master/README_pt.md)
 
