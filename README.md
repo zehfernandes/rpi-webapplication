@@ -20,7 +20,7 @@ To do that you need to build a clean Linux distro. Remove unnecessary stuff to f
 
 ## Buildroot and Linux distro
 
-Cross compile, kernel configuration, make are common keywords in the Linux world, very low-level knowledge compare to the web environment. But are some tools to help us in this chaos. The Builroot is a simple, efficient and easy-to-use tool to generate embedded Linux systems through cross-compilation.
+Cross compile, kernel configuration, make are common keywords in the Linux world, very low-level knowledge compare to the web environment. But are some tools to help us in this chaos. The Buildroot is a simple, efficient and easy-to-use tool to generate embedded Linux systems through cross-compilation.
 
 ![Image](http://cellux.github.io/articles/diy-linux-with-buildroot-part-1/buildroot.png)
 
