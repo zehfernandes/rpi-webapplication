@@ -84,8 +84,8 @@ You can see a video with a slightly better resolution [here](https://dl.dropboxu
 Below you can find some notes about QTBrowser rendering process:
 
 1. During the page load, classes with CSS animations won't work. You must programatically add the class after the page is loaded.
-2. Only use propertyies that use CSS Composite Layer, such as `transition` and `opacity`.
-3. Images with size grather than 1000px affects negatively the frame rate.
+2. Only use properties that use CSS Composite Layer, such as `transition` and `opacity`.
+3. Images with size greater than 1000px affects negatively the frame rate.
 4. Ditch jQuery. You don't need it.
 5. Avoid gradients and images with opacity.
 6. Multiple images being presented on the screen performs better than multiple canvas.
