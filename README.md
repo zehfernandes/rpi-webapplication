@@ -78,7 +78,7 @@ qtbrowser --url=http://url
 
 QTBrowser is not Chrome or Safari, even by using WebKit to render the page. It has some details and different ways of dealing with HTML, and it is important to develop your front-end code while testing directly on the RPI. Even then, we would able to make this interface:
 
-![Qtbrowser example](https://dl.dropboxusercontent.com/u/262919/rpi-60fps-demo.gif)
+![Qtbrowser example](https://dl.dropboxusercontent.com/u/262919/rpi-60fps-demo.gif)<br/>
 You can see a video with a slightly better resolution [here](https://dl.dropboxusercontent.com/u/8015936/D3/rpi-interface.mp4)
 
 Below you can find some notes about QTBrowser rendering process:
