@@ -83,7 +83,7 @@ qtbrowser --url=http://url
 
 O QT não é o chrome e nem o safari, todos usam a engine webkit para renderização, mas possuem detalhes e formas diferentes de lidar com o HTML. É bem importante desenvolver seu front-end testando diretamente no QTbrowser. Durante nossos testes para criação desta interface:
 
-[![Interface](https://dl.dropboxusercontent.com/u/8015936/D3/interface.png)](https://dl.dropboxusercontent.com/u/8015936/D3/rpi-interface.mp4)
+[![Interface](https://www.dropbox.com/s/uq88tkbn5672zih/interface.png?raw=1)](https://www.dropbox.com/s/qkw7uuyvumzy6n8/rpi-interface.mp4?dl=0)
 
 Apreendemos vários detalhes e algumas dicas:
 
