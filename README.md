@@ -6,7 +6,7 @@ Raspberry is an amazing single-board computer, compact, powerful and low-cost. W
 
 Mostly used with Java, C and processing applications, which works at a low-level and are capable of controlling hardware resources, but to run a web application, you depend on an OS that abstracts these resources from you. To achieve something more performatic and take advantage of some other resources, such as the GPU, you must build a custom distro.
 
-[![Raspberry](https://dl.dropboxusercontent.com/u/8015936/D3/raspa.jpg)](https://dl.dropboxusercontent.com/u/8015936/D3/rasp.mp4)
+[![Raspberry](https://www.dropbox.com/s/umzsjr9unhq8200/raspa.jpg?dl=1)](https://www.dropbox.com/s/8k3dhdqa5pnntxt/rasp.mp4?dl=0)
 
 ## Hardware Acceleration and GPU.
 
