@@ -6,7 +6,7 @@ Raspberry é uma placa single-board incrível, compacta, pontente e de baixo cus
 
 Muito usada com aplicações Java, C, processing... permitindo trabalhar em baixo nível em contato direto com os recursos de hardware. Mas para rodar uma aplicação web você fica dependente de um OS e muito distante destes recursos. É preciso customizar uma distro para tirar proveito da placa.
 
-[![Raspberry](https://dl.dropboxusercontent.com/u/8015936/D3/raspa.jpg)](https://dl.dropboxusercontent.com/u/8015936/D3/rasp.mp4)
+[![Raspberry](https://www.dropbox.com/s/umzsjr9unhq8200/raspa.jpg?raw=1)](https://www.dropbox.com/s/8k3dhdqa5pnntxt/rasp.mp4?dl=0)
 
 
 ## Hardware Acceleration e GPU.
